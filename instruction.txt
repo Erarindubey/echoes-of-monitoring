@@ -1,0 +1,177 @@
+## 📘 Echoes of Monitoring – Instruction Manual
+
+**Author:** Arin Dubey
+**Created:** July 2025
+**Tags:** Docker, Prometheus, Grafana, Airflow, Monitoring, DevOps
+
+---
+
+### 🧭 Overview
+
+**Echoes of Monitoring** is a containerized monitoring infrastructure that bridges Apache Airflow (used for orchestration) with Prometheus (metrics scraper) and Grafana (dashboard visualizer). The system provides observability over data pipeline executions, task duration, and overall health through a seamless Docker network.
+
+---
+
+### 🛠️ Prerequisites
+
+Before setting up, ensure the following are installed:
+
+* [Docker](https://www.docker.com/)
+* [Docker Compose](https://docs.docker.com/compose/)
+* Git
+* Internet access (for pulling images)
+
+---
+
+### 📁 Project Structure
+
+```
+echoes-of-monitoring/
+│
+├── docker-compose.yml
+├── airflow/                    
+│   ├── Dockerfile             
+│   └── dags/                  
+│       └── sample_dag.py
+│
+├── prometheus/               
+│   ├── prometheus.yml         
+│
+├── grafana/                  
+│   └── provisioning/
+│       └── dashboards/
+│           └── airflow_dashboard.json
+│
+└── README.md                 
+```
+
+---
+
+### ⚙️ Step-by-Step Setup
+
+#### 1. 📦 Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/echoes-of-monitoring.git
+cd echoes-of-monitoring
+```
+
+---
+
+#### 2. 🧱 Set Up Docker Network
+
+```bash
+docker network create monitoring_bridge
+```
+
+Ensure both Prometheus-Grafana and Airflow services are connected to this custom bridge.
+
+---
+
+#### 3. 🐘 Configure Prometheus
+
+Edit `prometheus/prometheus.yml` to scrape Airflow metrics:
+
+```yaml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'airflow'
+    static_configs:
+      - targets: ['airflow-webserver:8080']
+```
+
+Make sure your Airflow container exposes metrics at `/admin/metrics`.
+
+---
+
+#### 4. 📊 Configure Grafana
+
+Grafana is provisioned to auto-load:
+
+* Prometheus as the default data source
+* A custom Airflow monitoring dashboard
+
+To access Grafana:
+
+```bash
+http://localhost:3000
+```
+
+* Default credentials: `admin/admin`
+* Change on first login.
+
+---
+
+#### 5. 🚀 Start Everything
+
+```bash
+docker-compose up -d
+```
+
+Use `docker ps` to verify containers are running:
+
+* `airflow-webserver`, `airflow-worker`, `redis`, `postgres`
+* `prometheus`, `grafana`
+
+---
+
+### 📉 Monitoring Metrics
+
+Once live:
+
+* Prometheus is available at: `http://localhost:9090`
+* Grafana at: `http://localhost:3000`
+* Airflow at: `http://localhost:8080`
+
+You can:
+
+* Scrape Airflow DAG/task metrics in Prometheus.
+* Visualize task success rates, durations, and failures in Grafana.
+* Use Grafana alerts for proactive notifications.
+
+---
+
+### 🔗 Network Bridge Verification
+
+To confirm containers are connected:
+
+```bash
+docker network inspect monitoring_bridge
+```
+
+You should see both `airflow` and `prometheus/grafana` services listed under `Containers`.
+
+---
+
+### 🧹 Teardown
+
+To stop and remove all containers and volumes:
+
+```bash
+docker-compose down -v
+docker network rm monitoring_bridge
+```
+
+---
+
+## 🔍 Troubleshooting
+
+| Problem                          | Solution                                                                                |
+| -------------------------------- | --------------------------------------------------------------------------------------- |
+| Prometheus cannot scrape Airflow | Check if Airflow webserver exposes `/admin/metrics` and update `prometheus.yml` targets |
+| Grafana shows “No data”          | Verify Prometheus is running and reachable                                              |
+| Network issues                   | Recreate the `monitoring_bridge` network and re-attach containers                       |
+
+---
+
+## 📌 Useful Commands
+
+```bash
+# Restart specific container as root (example)
+docker exec -u root -it airflow-worker bash
+
+# Tail logs
+docker-compose logs -f airflow-webserver
+```

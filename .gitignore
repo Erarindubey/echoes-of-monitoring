@@ -1,0 +1,9 @@
+*.log
+__pycache__/
+.env
+prometheus-3.4.2.windows-amd64.zip
+prometheus-3.4.2.windows-amd64/data/chunks_head/
+prometheus-3.4.2.windows-amd64/*.exe
+*.tar
+*.zip
+*.rar

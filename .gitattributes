@@ -1,0 +1,2 @@
+*.exe filter=lfs diff=lfs merge=lfs -text
+data/chunks_head/* filter=lfs diff=lfs merge=lfs -text
