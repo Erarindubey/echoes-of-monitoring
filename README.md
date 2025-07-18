@@ -71,12 +71,12 @@ docker-compose up --build
 ```
 NOTE:- Prometheus files are present but the main prometheus directory was excluded from git as it exceeds the size please refer to this link and download PROMETHEUS 
 
-#👉 [Download Prometheus v3.4.2 for Windows (amd64)](https://sourceforge.net/projects/prometheus.mirror/files/v3.4.2/)
+👉 [Download Prometheus v3.4.2 for Windows (amd64)](https://sourceforge.net/projects/prometheus.mirror/files/v3.4.2/)
 #This ZIP file includes:
-#- prometheus.exe
-#- promtool.exe
-#- prometheus.yml (default config)
-# [Prometheus download page](https://prometheus.io/download/) 
+- prometheus.exe
+- promtool.exe
+- prometheus.yml (default config)
+ [Prometheus download page](https://prometheus.io/download/) 
 
 Note:- For each time you start prometheus server and airflow server please attach both to a bridge network 
 i would recomment using 
