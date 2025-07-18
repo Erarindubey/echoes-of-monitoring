@@ -78,6 +78,13 @@ NOTE:- Prometheus files are present but the main prometheus directory was exclud
 #- prometheus.yml (default config)
 # [Prometheus download page](https://prometheus.io/download/) 
 
+Note:- For each time you start prometheus server and airflow server please attach both to a bridge network 
+i would recomment using 
+
+```bash
+docker network connect monitoring_net <Container_name>
+```
+
 ---
 
 ## 📬 Sample Email Alert
